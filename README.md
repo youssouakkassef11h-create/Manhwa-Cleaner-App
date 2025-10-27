@@ -1,1 +1,0 @@
-# Manhwa-Cleaner-App
