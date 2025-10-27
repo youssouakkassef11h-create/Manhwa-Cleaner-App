@@ -3,6 +3,8 @@ import cv2
 import numpy as np
 from PIL import Image
 import torch
+import zipfile
+import tempfile
 from lama_cleaner.model import LaMaInpainting
 from realesrgan import RealESRGAN
 from paddleocr import PaddleOCR
@@ -114,7 +116,7 @@ def clean_chapter_folder(chapter_folder, ocr_model, lama_model, realesrgan_model
 def process_all_chapters(uploaded_files, lang, scale, output_format, progress=gr.Progress(track_tqdm=True)):
     """Function connecting UI with backend logic"""
     if not uploaded_files:
-        return "Please select image files first."
+        return None, "Please select image files first."
 
     # Load models based on user selection
     progress(0, desc="Loading models...")
@@ -130,28 +132,35 @@ def process_all_chapters(uploaded_files, lang, scale, output_format, progress=gr
 
     chapters_to_process = []
     if potential_chapters:
-        # Case 1: Subfolders (chapters) found
         chapters_to_process = [os.path.join(root_path, d) for d in potential_chapters]
         print(f"📂 Found {len(chapters_to_process)} chapters in: {root_path}")
     else:
-        # Case 2: No subfolders, assume root folder is a single chapter
         chapters_to_process = [root_path]
         print(f"📂 No chapters found, processing current folder: {root_path}")
 
     if not chapters_to_process:
-         return "No images found for processing in the selected folder."
+        return None, "No images found for processing in the selected folder."
 
-    processed_chapters_summary = []
+    processed_folders = []
     for chapter_path in progress.tqdm(chapters_to_process, desc="Processing chapters"):
-        chapter_name = os.path.basename(chapter_path)
-        print(f"📂 Processing chapter: {chapter_name}")
         output_folder = clean_chapter_folder(chapter_path, ocr_model, lama_model, realesrgan_model, output_format)
         if output_folder:
-            processed_chapters_summary.append(f"✅ {chapter_name} -> {output_folder}")
-        else:
-            processed_chapters_summary.append(f"⚠️ {chapter_name} -> No images to process")
+            processed_folders.append(output_folder)
 
-    return "\n".join(processed_chapters_summary)
+    if not processed_folders:
+        return None, "No images were processed."
+
+    # Create a zip file with the results
+    zip_path = os.path.join(tempfile.gettempdir(), "cleaned_chapters.zip")
+    with zipfile.ZipFile(zip_path, 'w') as zipf:
+        for folder in processed_folders:
+            for root, _, files in os.walk(folder):
+                for file in files:
+                    file_path = os.path.join(root, file)
+                    arcname = os.path.relpath(file_path, os.path.dirname(folder))
+                    zipf.write(file_path, arcname=arcname)
+
+    return zip_path, f"✅ Processing complete. Your download is ready."
 
 # =========================
 # Gradio Interface
@@ -164,7 +173,10 @@ interface = gr.Interface(
         gr.Dropdown([2, 4], label="Super-resolution scale", value=2, info="2x is faster, 4x gives higher quality"),
         gr.Radio(['PNG', 'JPG'], label="Save cleaned images format", value='PNG')
     ],
-    outputs=gr.Textbox(label="Status and results", lines=10),
+    outputs=[
+        gr.File(label="Download cleaned chapters (.zip)"),
+        gr.Textbox(label="Status", lines=5)
+    ],
     title="🖌️ Advanced Smart Manhwa Cleaner",
     description="Upload the images you want to clean. You can upload a single chapter or drag a folder containing multiple chapter folders.",
     allow_flagging='never',
@@ -174,4 +186,4 @@ interface = gr.Interface(
 if __name__ == "__main__":
     # Note: On first run, models will be loaded and cached. This may take some time.
     # For RealESRGAN scale 4, make sure you have 'RealESRGAN_x4plus.pth' file available or let it download.
-    interface.launch()
+    interface.launch(server_name="0.0.0.0")
