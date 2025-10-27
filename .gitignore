@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+pip-selfcheck.json
+pip-log.txt
+.tox/
+.nox/
+.eggs/
+*.egg-info/
+*.egg
+
+# Logs
+*.log
+*.log.*
+
+# Temporary files
+jules-scratch/
+gradio_output.log
+requirements_temp.txt
+
+# IDE files
+.idea/
+.vscode/

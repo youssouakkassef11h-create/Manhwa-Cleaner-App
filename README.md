@@ -12,6 +12,26 @@ This project is a web-based tool built with Gradio to automatically "clean" manh
 
 ## 🚀 Getting Started
 
+### Using Docker (Recommended)
+
+Using Docker is the easiest and most reliable way to run this application. It ensures that the environment is consistent and all dependencies are handled correctly.
+
+1.  **Build the Docker image:**
+    ```bash
+    docker build -t manhwa-cleaner .
+    ```
+    ***Note:*** *The initial build process can take a significant amount of time (10-20 minutes or more) as it needs to download large deep learning models and install numerous dependencies. Please be patient and ensure you have a stable internet connection.*
+
+2.  **Run the Docker container:**
+    ```bash
+    docker run -p 7860:7860 manhwa-cleaner
+    ```
+
+3.  **Open the web interface:**
+    Open your web browser and navigate to `http://127.0.0.1:7860`.
+
+### Local Installation
+
 ### Prerequisites
 
 - Python 3.8 or higher

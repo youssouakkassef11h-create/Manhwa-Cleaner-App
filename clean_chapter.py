@@ -186,4 +186,4 @@ interface = gr.Interface(
 if __name__ == "__main__":
     # Note: On first run, models will be loaded and cached. This may take some time.
     # For RealESRGAN scale 4, make sure you have 'RealESRGAN_x4plus.pth' file available or let it download.
-    interface.launch()
+    interface.launch(server_name="0.0.0.0")
