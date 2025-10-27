@@ -1,96 +1,41 @@
-# 🖌️ Advanced Smart Manhwa Cleaner
+# 🖌️ Advanced Smart Manhwa Cleaner for Google Colab
 
-This project is a web-based tool built with Gradio to automatically "clean" manhwa or manga pages. It streamlines the process of removing text and enhancing image quality, making it an essential tool for scanlation groups or anyone looking to prepare raw comic pages.
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YOUR_USERNAME/YOUR_REPOSITORY/blob/main/manhwa_cleaner.ipynb)
+
+This project provides a powerful, automated tool for cleaning text from manhwa or manga pages and enhancing their quality, all within a user-friendly Google Colab notebook.
 
 ## ✨ Features
 
-- **Automatic Text Detection**: Utilizes PaddleOCR to accurately identify text boxes on comic pages.
-- **High-Quality Text Removal**: Employs the LaMa Inpainting model to intelligently fill in the areas where text has been removed, preserving the original artwork.
-- **Image Super-Resolution**: Integrates RealESRGAN to upscale the cleaned images, resulting in high-resolution, print-quality pages.
-- **User-Friendly Web Interface**: A simple Gradio interface allows users to easily upload their images and configure the cleaning process.
-- **Batch Processing**: Supports processing of entire folders (chapters) at once.
+-   **One-Click Setup:** No complex local installation required. Just open the notebook in Colab and run the setup cell.
+-   **GPU-Accelerated:** Takes full advantage of Colab's free GPU resources for fast processing.
+-   **Automatic Text Detection & Removal:** Uses advanced AI models (PaddleOCR and LaMa Inpainting) to accurately find and remove text.
+-   **Image Upscaling:** Integrates RealESRGAN to upscale the cleaned images, resulting in high-resolution pages.
+-   **User-Friendly Web Interface:** Launches a Gradio UI right from the notebook, allowing you to easily upload and process your images.
 
 ## 🚀 Getting Started
 
-### Using Docker (Recommended)
+Running this tool is as simple as opening a notebook and running a few cells.
 
-Using Docker is the easiest and most reliable way to run this application. It ensures that the environment is consistent and all dependencies are handled correctly.
+### Instructions
 
-1.  **Build the Docker image:**
-    ```bash
-    docker build -t manhwa-cleaner .
-    ```
-    ***Note:*** *The initial build process can take a significant amount of time (10-20 minutes or more) as it needs to download large deep learning models and install numerous dependencies. Please be patient and ensure you have a stable internet connection.*
+1.  **Open the Notebook in Google Colab:**
+    Click the "Open In Colab" badge at the top of this readme.
 
-2.  **Run the Docker container:**
-    ```bash
-    docker run -p 7860:7860 manhwa-cleaner
-    ```
+2.  **Run the Cells in Order:**
+    Inside the Colab notebook, you will see numbered cells. Run them one by one, in order:
+    -   **Cell 1: Setup:** This will install all the necessary libraries. It may take a few minutes.
+    -   **Cell 2: Main Application Code:** This defines all the functions needed to run the cleaner.
+    -   **Cell 3: Launch the App!:** This will start the Gradio web interface and provide you with a public URL.
 
-3.  **Open the web interface:**
-    Open your web browser and navigate to `http://127.0.0.1:7860`.
-
-### Local Installation
-
-### Prerequisites
-
-- Python 3.8 or higher
-- NVIDIA GPU with CUDA support (recommended for better performance)
-- `git` for cloning the repository
-
-### Installation
-
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/user/advanced-smart-manhwa-cleaner.git
-    cd advanced-smart-manhwa-cleaner
-    ```
-
-2.  **Create a virtual environment (recommended):**
-    ```bash
-    python -m venv venv
-    source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
-    ```
-
-3.  **Install the required dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    ```
-    *Note: This process may take some time as it will download several large deep learning models.*
-
-### Usage
-
-1.  **Run the Gradio application:**
-    ```bash
-    python clean_chapter.py
-    ```
-
-2.  **Open the web interface:**
-    Open your web browser and navigate to the local URL provided by Gradio (usually `http://127.0.0.1:7860`).
-
-3.  **Using the Interface:**
-    - **Select chapter images or drag the entire folder**: Upload all the image files for a single chapter, or drag and drop a folder containing multiple chapter subfolders.
-    - **Text language in images**: Choose the language of the text on the pages for more accurate detection.
-    - **Super-resolution scale**: Select the upscaling factor. `2x` is faster, while `4x` provides higher quality.
-    - **Save cleaned images format**: Choose whether to save the output images as `PNG` or `JPG`.
-
-4.  **Processing:**
-    After configuring the options, the process will start. You can monitor the progress in the terminal and in the Gradio interface.
-
-5.  **Output:**
-    The cleaned images will be saved in a new subfolder named `chapter_cleaned` inside each processed chapter's directory.
+3.  **Use the Application:**
+    Click the public URL generated by the final cell to open the cleaner interface in a new browser tab. From there, you can upload your images and start the cleaning process.
 
 ## ⚙️ How It Works
 
-The script performs the following steps for each image:
+The notebook performs the following steps:
 
-1.  **Text Detection**: It uses `PaddleOCR` to find the bounding boxes of all text elements.
-2.  **Mask Creation**: A mask is generated based on the detected text boxes.
-3.  **Text Removal**: The `LaMaInpainting` model is used to inpaint the masked areas, effectively removing the text while reconstructing the background.
-4.  **Quality Enhancement**: The `RealESRGAN` model upscales the cleaned image to a higher resolution.
+1.  **Environment Setup**: The first cell installs all required Python packages and deep learning frameworks.
+2.  **Code Definition**: The second cell loads the entire application logic, including the functions for text detection, inpainting, and upscaling.
+3.  **Gradio Launch**: The third cell starts a web server using Gradio and creates a secure, shareable link that you can use to access the UI.
 
-Models are cached in memory after the first run to speed up subsequent processing.
-
-## 🤝 Contributing
-
-Contributions are welcome! If you have any ideas, suggestions, or bug reports, please open an issue or submit a pull request.
+Enjoy a hassle-free cleaning experience!
